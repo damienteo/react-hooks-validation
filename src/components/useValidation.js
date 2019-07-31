@@ -1,7 +1,9 @@
 export const useValidation = config => {
   return {
     errors: {},
-    getFormProps: e => ({}),
-    getFieldProps: fieldName => ({})
+    getFormProps: e => {
+      console.log("getFormProps", e);
+    },
+    getFieldProps: fieldName => console.log("getFieldProps", fieldName)
   };
 };
