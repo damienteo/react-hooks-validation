@@ -8,6 +8,10 @@ export function validationReducer(state, action) {
         ...state,
         values
       };
+    case "validate":
+      console.log("state", state);
+      console.log("action", action);
+      return { ...state, errors: action.payload };
     case "submit":
       return { ...state, submitted: true };
     default:
