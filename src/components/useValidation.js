@@ -1,4 +1,6 @@
 import { useReducer, useEffect } from "react";
+import useDeepCompareEffect from "use-deep-compare-effect";
+
 import { validationReducer } from "./validationReducer";
 import { validateFields } from "./validateField";
 
@@ -10,21 +12,24 @@ const initialState = {
 
 export const useValidation = config => {
   const [state, dispatch] = useReducer(validationReducer, initialState);
-  console.log("config in useValidation", config);
 
-  useEffect(() => {
-    const errors = validateFields(state.fields, config.fields);
-    dispatch({ type: "validate", payload: errors }, [
-      state.fields,
-      config.fields
-    ]);
-  });
+  useDeepCompareEffect(() => {
+    const errors = validateFields(state.values, config.fields);
+    dispatch({ type: "validate", payload: errors });
+  }, [state.values, config.fields]);
 
   return {
     errors: state.errors,
-    getFormProps: e => {
-      console.log("getFormProps", e);
-    },
+    getFormProps: () => ({
+      onSubmit: e => {
+        console.log("getFormProps", e);
+        e.preventDefault();
+        dispatch({ type: "submit" });
+        if (config.onSubmit) {
+          config.onSubmit(state);
+        }
+      }
+    }),
     getFieldProps: fieldName => ({
       onChange: e => {
         console.log("getFieldProps", fieldName);
