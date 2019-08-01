@@ -75,7 +75,8 @@ export const useValidation = config => {
         dispatch({ type: "blur", payload: fieldName });
       },
       name: fieldName,
-      value: state.values[fieldName]
+      value: state.values[fieldName],
+      "aria-invalid": String(!!errors[fieldName])
     })
   };
 };
