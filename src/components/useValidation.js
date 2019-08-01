@@ -8,10 +8,21 @@ const initialState = {
   values: {},
   blurred: {},
   errors: {},
-  submittedErrors: {},
-  blurredErrors: {},
   submitted: false
 };
+
+function getErrors(state, config) {
+  switch (config.showErrors) {
+    case "always":
+      return state.errors;
+    case "blur":
+      return Object.entries(state.blurred)
+        .filter(([, blurred]) => blurred)
+        .reduce((acc, [name]) => ({ ...acc, [name]: state.errors[name] }), {});
+    default:
+      return state.submitted ? state.errors : {};
+  }
+}
 
 export const useValidation = config => {
   const [state, dispatch] = useReducer(validationReducer, initialState);
@@ -21,20 +32,22 @@ export const useValidation = config => {
     dispatch({ type: "validate", payload: errors });
   }, [state.values, config.fields]);
 
-  const blurredErrors = useMemo(() => {
-    const returnValue = {};
-    for (let fieldName in state.errors) {
-      returnValue[fieldName] = state.blurred[fieldName]
-        ? state.errors[fieldName]
-        : null;
-    }
-    return returnValue;
-  }, [state.errors, state.blurred]);
+  const errors = useMemo(() => getErrors(state, config), [state, config]);
+
+  //   const blurredErrors = useMemo(() => {
+  //     const returnValue = {};
+  //     for (let fieldName in state.errors) {
+  //       returnValue[fieldName] = state.blurred[fieldName]
+  //         ? state.errors[fieldName]
+  //         : null;
+  //     }
+  //     return returnValue;
+  //   }, [state.errors, state.blurred]);
 
   return {
-    errors: state.errors,
-    blurredErrors,
-    submittedErrors: state.submitted ? state.errors : {},
+    errors,
+    // blurredErrors,
+    // submittedErrors: state.submitted ? state.errors : {},
     getFormProps: () => ({
       onSubmit: e => {
         console.log("getFormProps", e);
@@ -47,7 +60,7 @@ export const useValidation = config => {
     }),
     getFieldProps: fieldName => ({
       onChange: e => {
-        console.log("getFieldProps", fieldName);
+        console.log("getFieldProps", e.target);
         if (!config.fields[fieldName]) {
           return;
         }

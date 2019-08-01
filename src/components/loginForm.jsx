@@ -12,6 +12,7 @@ const config = {
       isMinLength: { value: 6, message: "Please make it more secure" }
     }
   },
+  showErrors: "blur",
   onSubmit: e => {
     return null;
   }
@@ -21,9 +22,9 @@ const LoginForm = () => {
   const {
     getFieldProps,
     getFormProps,
-    errors,
-    blurredErrors,
-    submittedErrors
+    errors
+    // blurredErrors,
+    // submittedErrors
   } = useValidation(config);
   console.log(useValidation(config));
   return (
@@ -33,14 +34,14 @@ const LoginForm = () => {
         <label>
           Username
           <br /> <input {...getFieldProps("username")} />
-          {blurredErrors.username && <div>Error: {blurredErrors.username}</div>}
+          {errors.username && <div>Error: {errors.username}</div>}
         </label>
       </div>
       <div>
         <label>
           Password
           <br /> <input type="password" {...getFieldProps("password")} />
-          {blurredErrors.password && <div>Error: {blurredErrors.password}</div>}
+          {errors.password && <div>Error: {errors.password}</div>}
         </label>
       </div>
       <button type="submit">Submit my Form</button>
