@@ -2,7 +2,7 @@ import React from "react";
 
 import { useValidation } from "./useValidation";
 
-const config = {
+const config = fields => ({
   fields: {
     username: {
       isRequired: { message: "Please fill out a username" }
@@ -10,23 +10,24 @@ const config = {
     password: {
       isRequired: { message: "Please fill out a password" },
       isMinLength: { value: 6, message: "Please make it more secure" }
+    },
+    repeatPassword: {
+      isRequired: { message: "Please fill out a password" },
+      isMinLength: { value: 6, message: "Please make it more secure" },
+      isEqual: {
+        value: fields.password,
+        message: "Your passwords don’t match"
+      }
     }
   },
   showErrors: "blur",
   onSubmit: e => {
     return null;
   }
-};
+});
 
 const LoginForm = () => {
-  const {
-    getFieldProps,
-    getFormProps,
-    errors
-    // blurredErrors,
-    // submittedErrors
-  } = useValidation(config);
-  console.log(useValidation(config));
+  const { getFieldProps, getFormProps, errors } = useValidation(config);
   return (
     <form {...getFormProps()}>
       <h1>LoginForm</h1>
@@ -42,6 +43,13 @@ const LoginForm = () => {
           Password
           <br /> <input type="password" {...getFieldProps("password")} />
           {errors.password && <div>Error: {errors.password}</div>}
+        </label>
+      </div>
+      <div>
+        <label>
+          Repeat Password
+          <br /> <input type="password" {...getFieldProps("repeatPassword")} />
+          {errors.repeatPassword && <div>Error: {errors.repeatPassword}</div>}
         </label>
       </div>
       <button type="submit">Submit my Form</button>

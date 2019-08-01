@@ -3,3 +3,6 @@ export const isRequired = config => value =>
 
 export const isMinLength = config => value =>
   value.length < config.value ? config.message : null;
+
+export const isEqual = config => value =>
+  value !== config.value ? config.message : null;

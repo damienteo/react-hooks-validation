@@ -24,8 +24,22 @@ function getErrors(state, config) {
   }
 }
 
+//   const blurredErrors = useMemo(() => {
+//     const returnValue = {};
+//     for (let fieldName in state.errors) {
+//       returnValue[fieldName] = state.blurred[fieldName]
+//         ? state.errors[fieldName]
+//         : null;
+//     }
+//     return returnValue;
+//   }, [state.errors, state.blurred]);
+
 export const useValidation = config => {
   const [state, dispatch] = useReducer(validationReducer, initialState);
+
+  if (typeof config === "function") {
+    config = config(state.values);
+  }
 
   useDeepCompareEffect(() => {
     const errors = validateFields(state.values, config.fields);
@@ -34,20 +48,8 @@ export const useValidation = config => {
 
   const errors = useMemo(() => getErrors(state, config), [state, config]);
 
-  //   const blurredErrors = useMemo(() => {
-  //     const returnValue = {};
-  //     for (let fieldName in state.errors) {
-  //       returnValue[fieldName] = state.blurred[fieldName]
-  //         ? state.errors[fieldName]
-  //         : null;
-  //     }
-  //     return returnValue;
-  //   }, [state.errors, state.blurred]);
-
   return {
     errors,
-    // blurredErrors,
-    // submittedErrors: state.submitted ? state.errors : {},
     getFormProps: () => ({
       onSubmit: e => {
         console.log("getFormProps", e);
