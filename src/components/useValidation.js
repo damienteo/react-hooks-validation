@@ -23,7 +23,7 @@ export const useValidation = config => {
 
   const blurredErrors = useMemo(() => {
     const returnValue = {};
-    for (let fieldName in state.Errors) {
+    for (let fieldName in state.errors) {
       returnValue[fieldName] = state.blurred[fieldName]
         ? state.errors[fieldName]
         : null;
