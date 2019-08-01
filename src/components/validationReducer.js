@@ -6,6 +6,12 @@ export function validationReducer(state, action) {
         ...state,
         values
       };
+    case "blur":
+      const blurred = { ...state.blurred, [action.payload]: true };
+      return {
+        ...state,
+        blurred
+      };
     case "validate":
       return { ...state, errors: action.payload };
     case "submit":

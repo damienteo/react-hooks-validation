@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useMemo } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
 import { validationReducer } from "./validationReducer";
@@ -6,8 +6,10 @@ import { validateFields } from "./validateField";
 
 const initialState = {
   values: {},
+  blurred: {},
   errors: {},
   submittedErrors: {},
+  blurredErrors: {},
   submitted: false
 };
 
@@ -19,8 +21,19 @@ export const useValidation = config => {
     dispatch({ type: "validate", payload: errors });
   }, [state.values, config.fields]);
 
+  const blurredErrors = useMemo(() => {
+    const returnValue = {};
+    for (let fieldName in state.Errors) {
+      returnValue[fieldName] = state.blurred[fieldName]
+        ? state.errors[fieldName]
+        : null;
+    }
+    return returnValue;
+  }, [state.errors, state.blurred]);
+
   return {
     errors: state.errors,
+    blurredErrors,
     submittedErrors: state.submitted ? state.errors : {},
     getFormProps: () => ({
       onSubmit: e => {
@@ -42,6 +55,9 @@ export const useValidation = config => {
           type: "change",
           payload: { [fieldName]: e.target.value }
         });
+      },
+      onBlur: () => {
+        dispatch({ type: "blur", payload: fieldName });
       },
       name: fieldName,
       value: state.values[fieldName]

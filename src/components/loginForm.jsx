@@ -22,8 +22,10 @@ const LoginForm = () => {
     getFieldProps,
     getFormProps,
     errors,
+    blurredErrors,
     submittedErrors
   } = useValidation(config);
+  console.log(useValidation(config));
   return (
     <form {...getFormProps()}>
       <h1>LoginForm</h1>
@@ -31,18 +33,14 @@ const LoginForm = () => {
         <label>
           Username
           <br /> <input {...getFieldProps("username")} />
-          {submittedErrors.username && (
-            <div>Error: {submittedErrors.username}</div>
-          )}
+          {blurredErrors.username && <div>Error: {blurredErrors.username}</div>}
         </label>
       </div>
       <div>
         <label>
           Password
           <br /> <input type="password" {...getFieldProps("password")} />
-          {submittedErrors.password && (
-            <div>Error: {submittedErrors.password}</div>
-          )}
+          {blurredErrors.password && <div>Error: {blurredErrors.password}</div>}
         </label>
       </div>
       <button type="submit">Submit my Form</button>
