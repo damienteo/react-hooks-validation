@@ -7,6 +7,7 @@ import { validateFields } from "./validateField";
 const initialState = {
   values: {},
   errors: {},
+  submittedErrors: {},
   submitted: false
 };
 
@@ -20,6 +21,7 @@ export const useValidation = config => {
 
   return {
     errors: state.errors,
+    submittedErrors: state.submitted ? state.errors : {},
     getFormProps: () => ({
       onSubmit: e => {
         console.log("getFormProps", e);

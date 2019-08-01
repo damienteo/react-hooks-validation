@@ -18,7 +18,12 @@ const config = {
 };
 
 const LoginForm = () => {
-  const { getFieldProps, getFormProps, errors } = useValidation(config);
+  const {
+    getFieldProps,
+    getFormProps,
+    errors,
+    submittedErrors
+  } = useValidation(config);
   return (
     <form {...getFormProps()}>
       <h1>LoginForm</h1>
@@ -26,14 +31,18 @@ const LoginForm = () => {
         <label>
           Username
           <br /> <input {...getFieldProps("username")} />
-          {errors.username && <div>Error: {errors.username}</div>}
+          {submittedErrors.username && (
+            <div>Error: {submittedErrors.username}</div>
+          )}
         </label>
       </div>
       <div>
         <label>
           Password
           <br /> <input type="password" {...getFieldProps("password")} />
-          {errors.password && <div>Error: {errors.password}</div>}
+          {submittedErrors.password && (
+            <div>Error: {submittedErrors.password}</div>
+          )}
         </label>
       </div>
       <button type="submit">Submit my Form</button>
