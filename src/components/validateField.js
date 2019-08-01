@@ -2,9 +2,12 @@ import * as validators from "./validators";
 
 function validateField(fieldValue = "", fieldConfig) {
   for (let validatorName in fieldConfig) {
-    const validatorConfig = fieldConfig[validatorName];
-    const validator = validators[validatorName];
-    const configuredValidator = validator(validatorConfig);
+    let validatorConfig = fieldConfig[validatorName];
+    if (typeof validatorConfig === "string") {
+      validatorConfig = { message: validatorConfig };
+    }
+
+    const configuredValidator = validators[validatorName](validatorConfig);
     const errorMessage = configuredValidator(fieldValue);
 
     if (errorMessage) return errorMessage;

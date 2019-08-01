@@ -5,14 +5,14 @@ import { useValidation } from "./useValidation";
 const config = fields => ({
   fields: {
     username: {
-      isRequired: { message: "Please fill out a username" }
+      isRequired: "Please fill out a username"
     },
     password: {
-      isRequired: { message: "Please fill out a password" },
+      isRequired: "Please fill out a password",
       isMinLength: { value: 6, message: "Please make it more secure" }
     },
     repeatPassword: {
-      isRequired: { message: "Please fill out a password" },
+      isRequired: "Please fill out a password",
       isMinLength: { value: 6, message: "Please make it more secure" },
       isEqual: {
         value: fields.password,
