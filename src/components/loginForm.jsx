@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { useValidation } from "./useValidation";
+import { ValidationContext, ValidationProvider } from "./validationContext";
+import PasswordField from "./passwordField";
 
 const config = fields => ({
   fields: {
@@ -30,32 +32,32 @@ const config = fields => ({
 
 const LoginForm = () => {
   const { getFieldProps, getFormProps, errors } = useValidation(config);
+
   return (
-    <form {...getFormProps()}>
-      <h1>LoginForm</h1>
-      <div>
-        <label>
-          Username
-          <br /> <input {...getFieldProps("username")} />
-          {errors.username && <div>Error: {errors.username}</div>}
-        </label>
-      </div>
-      <div>
-        <label>
-          Password
-          <br /> <input type="password" {...getFieldProps("password")} />
-          {errors.password && <div>Error: {errors.password}</div>}
-        </label>
-      </div>
-      <div>
-        <label>
-          Repeat Password
-          <br /> <input type="password" {...getFieldProps("repeatPassword")} />
-          {errors.repeatPassword && <div>Error: {errors.repeatPassword}</div>}
-        </label>
-      </div>
-      <button type="submit">Submit my Form</button>
-    </form>
+    <ValidationProvider config={config}>
+      <form {...getFormProps()}>
+        <h1>LoginForm</h1>
+        <div>
+          <label>
+            Username
+            <br /> <input {...getFieldProps("username")} />
+            {errors.username && <div>Error: {errors.username}</div>}
+          </label>
+        </div>
+        <div>
+          <PasswordField />
+        </div>
+        <div>
+          <label>
+            Repeat Password
+            <br />{" "}
+            <input type="password" {...getFieldProps("repeatPassword")} />
+            {errors.repeatPassword && <div>Error: {errors.repeatPassword}</div>}
+          </label>
+        </div>
+        <button type="submit">Submit my Form</button>
+      </form>
+    </ValidationProvider>
   );
 };
 

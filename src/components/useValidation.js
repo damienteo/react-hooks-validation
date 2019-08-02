@@ -73,7 +73,7 @@ export const useValidation = config => {
         }
       }
     }),
-    getFieldProps: fieldName => ({
+    getFieldProps: (fieldName, overrides = {}) => ({
       onChange: e => {
         console.log("getFieldProps", e.target);
         if (!config.fields[fieldName]) {
@@ -83,9 +83,15 @@ export const useValidation = config => {
           type: "change",
           payload: { [fieldName]: e.target.value }
         });
+        if (overrides.onChange) {
+          overrides.onChange(e);
+        }
       },
-      onBlur: () => {
+      onBlur: e => {
         dispatch({ type: "blur", payload: fieldName });
+        if (overrides.onChange) {
+          overrides.onChange(e);
+        }
       },
       name: fieldName,
       value: state.values[fieldName],
