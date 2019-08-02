@@ -22,6 +22,7 @@ const config = fields => ({
   },
   showErrors: "blur",
   onSubmit: e => {
+    console.log("onSubmit", e);
     return null;
   }
 });

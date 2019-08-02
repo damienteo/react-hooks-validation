@@ -16,6 +16,7 @@ function getErrors(state, config) {
     case "always":
       return state.errors;
     case "blur":
+      if (state.submitted) return state.errors;
       return Object.entries(state.blurred)
         .filter(([, blurred]) => blurred)
         .reduce((acc, [name]) => ({ ...acc, [name]: state.errors[name] }), {});
@@ -48,6 +49,12 @@ export const useValidation = config => {
 
   const errors = useMemo(() => getErrors(state, config), [state, config]);
 
+  const isFormValid = useMemo(
+    () => Object.values(errors).every(error => error === null),
+    [errors]
+  );
+
+  console.log("state", state);
   return {
     errors,
     getFormProps: () => ({
@@ -56,7 +63,7 @@ export const useValidation = config => {
         e.preventDefault();
         dispatch({ type: "submit" });
         if (config.onSubmit) {
-          config.onSubmit(state);
+          config.onSubmit({ ...state, isFormValid });
         }
       }
     }),
