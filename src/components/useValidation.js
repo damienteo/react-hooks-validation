@@ -49,12 +49,18 @@ export const useValidation = config => {
 
   const errors = useMemo(() => getErrors(state, config), [state, config]);
 
-  const isFormValid = useMemo(
+  const hasNoErrors = useMemo(
     () => Object.values(errors).every(error => error === null),
     [errors]
   );
 
-  console.log("state", state);
+  const hasUserTouchedForm = useMemo(
+    () => Object.entries(state.blurred).length !== 0,
+    [state.blurred]
+  );
+
+  const isFormValid = hasNoErrors && hasUserTouchedForm;
+
   return {
     errors,
     getFormProps: () => ({

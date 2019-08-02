@@ -23,7 +23,8 @@ const config = fields => ({
   showErrors: "blur",
   onSubmit: e => {
     console.log("onSubmit", e);
-    return null;
+    if (e.isFormValid) console.log("Form is valid");
+    else console.log("errors present");
   }
 });
 
