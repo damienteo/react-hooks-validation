@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
-import { ValidationContext, ValidationProvider } from "./validationContext";
+import { ValidationContext } from "./validationContext";
 
 const PasswordField = () => {
-  const { getFieldProps, getFormProps, errors } = useContext(ValidationContext);
-  console.log("vlaidationcontext", ValidationContext);
-  console.log("context in oginform", useContext(ValidationContext));
+  const { getFieldProps, errors } = useContext(ValidationContext);
   return (
     <label>
       Password

@@ -61,11 +61,12 @@ export const useValidation = config => {
 
   const isFormValid = hasNoErrors && hasUserTouchedForm;
 
+  console.log("state", state);
+
   return {
     errors,
     getFormProps: () => ({
       onSubmit: e => {
-        console.log("getFormProps", e);
         e.preventDefault();
         dispatch({ type: "submit" });
         if (config.onSubmit) {
@@ -75,7 +76,6 @@ export const useValidation = config => {
     }),
     getFieldProps: (fieldName, overrides = {}) => ({
       onChange: e => {
-        console.log("getFieldProps", e.target);
         if (!config.fields[fieldName]) {
           return;
         }
